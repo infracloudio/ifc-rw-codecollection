@@ -15,11 +15,16 @@
 
 # InfraCloud RunWhen CodeCollection
 
-This CodeCollection aims to create a repository of CodeBundles that can address the various reproducible Incident Scenarios at [Infracloud/sre-stack](https://github.com/infracloudio/sre-stack/)
-- Set SLOs on Services and their dependencies
+This CodeCollection aims to create a repository of CodeBundles that can address the various reproducible incident scenarios at [Infracloud/sre-stack](https://github.com/infracloudio/sre-stack/)
+
+- Set meaningful SLOs on Services and their dependencies
   - DBs
   - Queues
   - Caches
   - Gateways and proxies
 - Create SLIs to continuosly monitor the health of services and dependencies
 - Create mitigation runbooks in some scenarios where root-cause can be deterministically attested to
+
+## Additional Docs
+- [RunWhen Concepts](docs/runwhen/concepts.md)
+- [Contributing to CodeCollections/CodeBundles](docs/runwhen/contrib.md)

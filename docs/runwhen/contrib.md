@@ -1,8 +1,10 @@
-# Creating a New CodeCollection
-## Forking the template repository
+# Contributing to CodeCollections/CodeBundles
 
-# Writing a Non-trivial CodeBundle
-## Directory structure / Scaffolding
+## Creating a New CodeCollection
+### Forking the template repository
+
+## Writing a Non-trivial CodeBundle
+### Directory structure / Scaffolding
 
 
 

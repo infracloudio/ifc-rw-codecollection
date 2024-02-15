@@ -5,14 +5,6 @@
   - [Uploading Cluster Topology to the Platform](#uploading-cluster-topology-to-the-platform)
 - [CodeCollections](#codecollections)
 - [CodeBundles](#codebundles)
-  - [Platform Definitions](#platform-definitions)
-    - [SLX](#slx)
-    - [SLI](#sli)
-    - [SLO](#slo)
-    - [Runbook / TaskSet](#runbook--taskset)
-  - [RunWhen Libraries](#runwhen-libraries)
-    - [RunWhen Services](#runwhen-services)
-  - [Robot Scripts - Task Runner](#robot-scripts---task-runner)
 
 # Runwhen Local
 - [source-code](https://github.com/runwhen-contrib/runwhen-local)
@@ -24,15 +16,16 @@ RunWhen Local has two core functions:
 - Upload Cluster Topology to the RunWhen Platform
 
 ## CheatSheet Generator
-At the moment RunWhen Local does not posses the ability to discover issues in
-your cluster and suggest mitigation runbooks / codebundles.
+At the moment RunWhen Local **does not posses the ability to discover issues** in
+your cluster and suggest mitigation runbooks / codebundles. 
 
-However, it generates a wide set of runbooks for you, if you already know the
+**However, it discovers your kubernetes resources and object names.**
+Using which, it generates a wide set of runbooks for you, if you already know the
 root cause. These runbooks contain documentation and pastable shell script
 snippets for the searched issue. These scripts / cheatsheet are already pre-templated
 with your namespaces and kubernetes resource names.
 
-The collection of cheatsheets / runbooks although not exhaustive, cover a significant portion
+This collection of cheatsheets / runbooks, although not exhaustive, covers a significant portion
 of recurring issues and healthcheck failures and can be useful to SREs for quick
 resolution of incidents.
 
@@ -75,18 +68,34 @@ Currently RunWhen has published two codecollections:
   - These are generally targeted towards SRE workloads and wraps various shell-scripts and CLI tooling.
 
 # CodeBundles
-  - YAML Configuration (for platform)
-  - Robot Framework scripts
-  - RunWhen Libraries for Robot Framework
-  - Additional Binaries
-  - Writing a non-trivial CodeBundle
-## Platform Definitions
-### SLX
-### SLI
-### SLO
-### Runbook / TaskSet
+CodeBundles are specific detectors/mitigators of known SLI/SLO violations in a live software stack.
 
-## RunWhen Libraries
-### RunWhen Services
+It comprises of:
+- Robot files
+  - Scripts / Playbooks / tasksets written using [Robot Framework](), that either
+    - Create and enforce RunWhen SLIs - `sli.robot`
+    - Create miitigation runbooks in response to an SLO/SLI violation - `runbook.robot`
+- Platform definitions of `{SLX, SLO, SLI, Runbook}` as `YAML` configurations
+  - These do not need to be located in your repo, however it's a good practice to have them committed in git.
+  - These configurations wrap standard behaviors for interacting with RunWhen Platform API, `papi`
+    - Endpoint: `https://papi.beta.runwhen.com`
+  - The RunWhen `YAML` configurations are only pertinent when your codebundle is live on RunWhen Platform, these do not play any role as of now for either local testing or RunWhen Local.
+- Test resources / scripts
 
-## Robot Scripts - Task Runner
+In a local testing environment you only need to execute the `*.robot` files inside the provided container configurations,
+- [Dockerfile](../../Dockerfile)
+- [vscode/devcontainer](../../.devcontainer.json)
+
+
+The usual call chain is as follows:
+- Robot Scripts
+  - User variable and secret injection
+  - Runwhen Libraries
+    - RunWhen Services 
+      -  Wrapped shell CLI command / Platform SDK code execution
+      -  or, direct shims to your shell scripts / python code when services are unavailable
+      -  These tasks fetch the current value of a metric / state
+         -  This metric value is then compared against the defined thresholds at `sli/slo.yaml` in the platform.
+      - If the Robot script just runs a set of tasks as a mitigation step, it returns either success or failure.
+
+More concepts and non-trivial FAQs around writing CodeBundles are explained at [Contributing to CodeCollections/CodeBundles](contrib.md)
