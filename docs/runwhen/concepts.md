@@ -5,7 +5,7 @@
   - [Uploading Cluster Topology to the Platform](#uploading-cluster-topology-to-the-platform)
 - [CodeCollections](#codecollections)
 - [CodeBundles](#codebundles)
-  - [Platform Definition](#platform-definition)
+  - [Platform Definitions](#platform-definitions)
     - [SLX](#slx)
     - [SLI](#sli)
     - [SLO](#slo)
@@ -48,16 +48,16 @@ runwhen workspace.
 - Next, take the yaml object and copy over it's contents to `uploadInfo:[]` section
 of the helm [`values.yaml` file](https://github.com/runwhen-contrib/helm-charts/blob/main/charts/runwhen-local/values.yaml#L121)
 - Once configured it should look like this:
-  ```
+  ```YAML
   uploadInfo:
     workspaceName: <your-workspace-name>
-    token: <your token> # It's not advised to paste the actual token in the values.yaml file and commit it to git
+    token: <your token> # Do NOT add token and commit to git
     workspaceOwnerEmail: tester@my-company.com
     papiURL: https://papi.beta.runwhen.com
-    defaultLocation: location-01-us-west1 # Or, any other available runwhen location
+    defaultLocation: location-01-us-west1 # available runwhen locations
   ```
 - You should pass the token from helm cli, to ensure you are not leaking the token via git
-  ```
+  ```bash
   helm upgrade --install  ${HELM_RELEASE_NAME} runwhen-contrib/runwhen-local \
     --set uploadInfo.token=${RUNWHEN_PLATFORM_TOKEN} \
      -f ${VALUES_FILE} -n ${NAMESPACE}
@@ -80,7 +80,7 @@ Currently RunWhen has published two codecollections:
   - RunWhen Libraries for Robot Framework
   - Additional Binaries
   - Writing a non-trivial CodeBundle
-## Platform Definition
+## Platform Definitions
 ### SLX
 ### SLI
 ### SLO
